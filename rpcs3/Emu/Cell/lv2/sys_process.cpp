@@ -415,7 +415,10 @@ void lv2_exitspawn(ppu_thread& ppu, std::vector<std::string>& argv, std::vector<
 	// sys_sm_shutdown
 	const bool is_real_reboot = (ppu.gpr[11] == 379);
 
-	Emu.CallFromMainThread([is_real_reboot, argv = std::move(argv), envp = std::move(envp), data = std::move(data)]() mutable
+		// sys_process_spawns_a_self2
+	const bool is_another_game = (ppu.gpr[11] == 27);
+
+	Emu.CallFromMainThread([is_real_reboot, is_another_game, argv = std::move(argv), envp = std::move(envp), data = std::move(data)]() mutable
 	{
 		sys_process.success("Process finished -> %s", argv[0]);
 
